@@ -1,15 +1,17 @@
 package com.example.todoapp.domain.data.network
 
+import android.nfc.Tag
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.todoapp.model.TodoModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 
 class Repo {
+    private val db = FirebaseFirestore.getInstance()
     fun getTodoData():LiveData<MutableList<TodoModel>>{
         val mutableData = MutableLiveData<MutableList<TodoModel>>()
-        FirebaseFirestore.getInstance().collection("Todos").get().addOnSuccessListener {
+        db.collection("Todos").get().addOnSuccessListener {
             val listData = mutableListOf<TodoModel>()
             for(document in it){
                 val title = document.getString("title")
@@ -20,5 +22,16 @@ class Repo {
             mutableData.value = listData
         }
         return mutableData
+    }
+    fun addTodoData(title:String, description:String){
+        val todo = hashMapOf(
+            "title" to title,
+            "description" to description
+        )
+        db.collection("Todos").add(todo).addOnSuccessListener{
+            Log.d("SuccessfulTag", "Datos agregados" )
+        }.addOnFailureListener{
+            Log.d("ErrorTag", "Datos NO agregados" )
+        }
     }
 }

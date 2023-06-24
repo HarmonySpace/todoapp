@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.todoapp.model.TasksProvider
 import com.example.todoapp.model.TodoModel
 import com.example.todoapp.domain.data.network.Repo
+import com.google.firebase.firestore.FirebaseFirestore
 
 class TodoViewModel : ViewModel() {
     private val repo = Repo()
@@ -15,6 +16,10 @@ class TodoViewModel : ViewModel() {
             mutableData.value = it
         }
         return mutableData
+    }
+
+    fun addTodo(title:String, description:String){
+       repo.addTodoData(title, description)
     }
 
     //val todoModels = MutableLiveData<List<TodoModel>>()
