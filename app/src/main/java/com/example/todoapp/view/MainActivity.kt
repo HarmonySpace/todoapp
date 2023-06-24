@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import android.content.Intent
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        observeData()
         adapter = MainAdapter(this)
         recyclerView = findViewById(R.id.rvTodos)
         recyclerView.adapter = adapter
@@ -41,6 +43,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun toastMessage (message:String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun observeData(){
+        viewModel.fetchTodoData().observe(this, Observer {
+            adapter.setListData(it)
+            adapter.notifyDataSetChanged()
+        })
     }
 
 }
