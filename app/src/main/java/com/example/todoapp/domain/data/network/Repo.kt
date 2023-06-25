@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class Repo {
     private val db = FirebaseFirestore.getInstance()
+
     fun getTodoData():LiveData<MutableList<TodoModel>>{
         val mutableData = MutableLiveData<MutableList<TodoModel>>()
         db.collection("Todos").get().addOnSuccessListener {
@@ -23,6 +24,7 @@ class Repo {
         }
         return mutableData
     }
+
     fun addTodoData(title:String, description:String){
         val todo = hashMapOf(
             "title" to title,
@@ -32,6 +34,34 @@ class Repo {
             Log.d("SuccessfulTag", "Datos agregados" )
         }.addOnFailureListener{
             Log.d("ErrorTag", "Datos NO agregados" )
+        }
+    }
+
+    fun deleteTodoData(title:String){
+       db.collection("Todos").whereEqualTo("title", title).get().addOnSuccessListener {
+           for(document in it){
+               document.reference.delete().addOnSuccessListener {
+                   Log.d("SuccessfulTag", "Datos eliminados" )
+               }.addOnFailureListener{
+                   Log.d("ErrorTag", "Datos NO eliminados" )
+               }
+           }
+       }.addOnFailureListener{
+           Log.d("ErrorTag", "Datos NO encontrados" )
+       }
+    }
+
+    fun updateTodoData(title:String, newData:Map<String, Any>){
+        db.collection("Todos").whereEqualTo("title", title).get().addOnSuccessListener {
+           for(document in it){
+               document.reference.update(newData).addOnFailureListener{
+                   Log.d("SuccessfulTag", "Datos actualizados" )
+               }.addOnFailureListener{
+                   Log.d("ErrorTag", "Datos NO actualizados" )
+               }
+           }
+        }.addOnFailureListener{
+            Log.d("ErrorTag", "Datos NO encontrados" )
         }
     }
 }

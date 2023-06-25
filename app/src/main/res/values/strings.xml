@@ -2,4 +2,6 @@
     <string name="app_name">To do App</string>
     <string name="task_0_or_1">Task 0 or 1</string>
     <string name="title">Title</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

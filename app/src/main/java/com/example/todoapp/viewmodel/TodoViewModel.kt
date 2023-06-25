@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class TodoViewModel : ViewModel() {
     private val repo = Repo()
+
     fun fetchTodoData():LiveData<MutableList<TodoModel>>{
         val mutableData = MutableLiveData<MutableList<TodoModel>>()
         repo.getTodoData().observeForever(){
@@ -22,16 +23,12 @@ class TodoViewModel : ViewModel() {
        repo.addTodoData(title, description)
     }
 
-    //val todoModels = MutableLiveData<List<TodoModel>>()
-    //val todoModel= MutableLiveData<TodoModel>()
+    fun deleteTodo(title:String){
+       repo.deleteTodoData(title)
+    }
 
-    //fun getTask(){
-    //    val aTodo = TasksProvider.getTaskP(0)
-    //    todoModel.postValue(aTodo)
-    //}
+    fun updateTodo(title:String, newData: Map<String, Any>){
+        repo.updateTodoData(title, newData)
+    }
 
-    //fun getAllTasks(){
-    //    val allTodos = TasksProvider.getTasksP()
-    //    todoModels.postValue(allTodos)
-    //}
 }
